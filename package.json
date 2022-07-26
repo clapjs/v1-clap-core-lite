@@ -4,6 +4,7 @@
   "description": "",
   "dependencies": {
     "@clapjs/egg-mongoose": "file:../egg-mongoose",
+    "mongoose-deep-populate": "^3.2.0",
     "egg": "^2",
     "egg-cors": "^2.2.3",
     "egg-socket.io": "^4.1.6",

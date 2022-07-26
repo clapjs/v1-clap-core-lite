@@ -3,12 +3,12 @@
 module.exports = app => {
   const attributes = {
     idUser: {
-      type: app.mongoose.Schema.ObjectId,
+      type: app.Mongoose.Schema.ObjectId,
       ref: 'sys_user',
     },
     userType: {
       type: String,
     },
   };
-  return app.clapMongooseSchema(attributes, false);
+  return app.clapMongooseSchema(attributes);
 };

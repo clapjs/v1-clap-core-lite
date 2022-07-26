@@ -10,10 +10,6 @@ module.exports = app => {
       name: '组织名称',
       type: String,
     },
-    license: {
-      name: 'license',
-      type: Date,
-    },
     order: {
       name: '排序号',
       type: Number,

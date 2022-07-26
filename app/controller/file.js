@@ -5,7 +5,7 @@ const path = require('path');
 
 const Controller = require('egg').Controller;
 
-class ClapFile extends Controller {
+class ClapFileCtrl extends Controller {
     async preview() {
         const error = {
             code: '0',
@@ -92,5 +92,5 @@ class ClapFile extends Controller {
     }
 }
 
-module.exports = ClapFile;
+module.exports = ClapFileCtrl;
 
