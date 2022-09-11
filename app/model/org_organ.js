@@ -1,20 +1,17 @@
 'use strict';
 
 module.exports = app => {
-  const attributes = {
-    organCode: {
-      name: '组织编码',
-      type: String,
-    },
-    organName: {
-      name: '组织名称',
-      type: String,
-    },
-    order: {
-      name: '排序号',
-      type: Number,
-    },
-  };
+  const schema =  app.clapMongooseSchema(require('./entity/org_organ')(app));
 
-  return app.clapMongooseSchema(attributes, true);
+  schema.pre('save', async (next) => {
+    /**在此定义变量或引入模块*/
+    next();
+  })
+
+  schema.post('save', function(doc, next) {
+    /**在此定义变量或引入模块*/
+    next();
+  });
+
+  return schema;
 };

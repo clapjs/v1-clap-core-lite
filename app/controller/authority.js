@@ -154,6 +154,93 @@ class ClapAuthCtrl extends Controller {
       error,
     };
   }
+
+  async registerOrgan() {
+    const error = {
+      code: '0',
+    };
+    let record;
+    const { ctx } = this,
+        { organName, idUser } = this.ctx.request.body;
+    if (!organName) {
+      error.code = '504';
+      error.message = '缺少参数 organName';
+    }
+    if (!idUser) {
+      error.code = '504';
+      error.message = '缺少参数 idUser';
+    }
+    if (error.code === '0') {
+      const organ = await ctx.model.OrgOrgan.create({ organName });
+      await ctx.model.OrgOrgan.updateMany({ _id: organ._id }, { idGroupOrgan: organ._id });
+      if (organ) {
+        const user = await ctx.model.SysUser.findOne({ _id: idUser });
+        const admin = await ctx.model.OrgOrganUser.create({ idUser, name: user.userName, idOrgan: organ._id, userType: 'Admin', workNo: 'admin', __s: 1 });
+        record = await ctx.model.OrgOrganUser.findOne({ _id: admin._id }).populate([ 'idOrgan' ]);
+      } else {
+        error.code = '500';
+        error.message = '组织创建失败';
+      }
+    }
+    this.ctx.body = error.code === '0' ? {
+      error,
+      record,
+    } : {
+      error,
+    };
+  }
+
+  async registerByOrganUser() {
+    const error = {
+      code: '0',
+    };
+    let record;
+    const { idOrganUser, userCode, userPwd = '123456' } = this.ctx.request.body;
+    if (!idOrganUser) {
+      error.code = '504';
+      error.message = '缺少参数 idOrganUser';
+    }
+    if (error.code === '0') {
+      const organUser = await this.ctx.model.OrgOrganUser.findOne({ _id: idOrganUser })
+          .catch(e => {
+            if (e) {
+              error.code = '700';
+            }
+            console.info(e);
+          });
+      if (organUser.idUser) {
+        error.code = '505';
+        error.message = '该人员已绑定登录账号';
+      } else {
+        record = await this.ctx.model.SysUser.findOne({ userCode, userType: 'Default' }).lean();
+        if (!record) {
+          record = await this.ctx.model.SysUser.create({
+            userCode,
+            userName: organUser.name,
+            userPwd: crypto.createHash('md5')
+                .update(userPwd)
+                .digest('base64'),
+            userType: 'Default',
+          }).catch(e => {
+            if (e) {
+              error.code = '700';
+            }
+            console.info(e);
+          });
+          await this.ctx.model.OrgOrganUser.updateMany({ _id: idOrganUser }, { idUser: record._id });
+        } else {
+          error.code = '505';
+          error.message = '该登录账号已开通，请联系管理员绑定组织关系';
+        }
+      }
+    }
+    this.ctx.body = error.code === '0' ? {
+      error,
+      record,
+    } : {
+      error,
+    };
+  }
 }
 
 module.exports = ClapAuthCtrl;

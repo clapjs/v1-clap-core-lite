@@ -1,14 +1,17 @@
 'use strict';
 
 module.exports = app => {
-  const attributes = {
-    idUser: {
-      type: app.Mongoose.Schema.ObjectId,
-      ref: 'sys_user',
-    },
-    userType: {
-      type: String,
-    },
-  };
-  return app.clapMongooseSchema(attributes);
+  const schema =  app.clapMongooseSchema(require('./entity/org_organ_user')(app));
+
+  schema.pre('save', async (next) => {
+    /**在此定义变量或引入模块*/
+    next();
+  })
+
+  schema.post('save', function(doc, next) {
+    /**在此定义变量或引入模块*/
+    next();
+  });
+
+  return schema;
 };

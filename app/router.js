@@ -15,8 +15,10 @@ module.exports = app => {
 
     router.post('/clap/authority/login', controller.clap.authority.login);
     router.post('/clap/authority/register', controller.clap.authority.register);
+    router.post('/clap/authority/registerByOrganUser', controller.clap.authority.registerByOrganUser);
     router.post('/clap/authority/changePwd', controller.clap.authority.changePwd);
     router.post('/clap/authority/resetPwd', controller.clap.authority.resetPwd);
+    router.post('/clap/authority/registerOrgan', controller.clap.authority.registerOrgan);
 
     // 文件系统API
     router.get('/clap/file/preview/:id', controller.clap.file.preview);

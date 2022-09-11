@@ -1,28 +1,17 @@
 'use strict';
 
 module.exports = app => {
-  const attributes = {
-    userCode: {
-      name: 'userCode',
-      type: String,
-    },
-    userName: {
-      name: 'userName',
-      type: String,
-    },
-    userPwd: {
-      name: 'userPwd',
-      type: String,
-    },
-    avatarColor: {
-      name: 'avatarColor',
-      type: String,
-    },
-    avatar: {
-      name: 'avatar',
-      type: String,
-    },
-  };
+  const schema =  app.clapMongooseSchema(require('./entity/sys_user')(app));
 
-  return app.clapMongooseSchema(attributes, false);
+  schema.pre('save', async (next) => {
+    /**在此定义变量或引入模块*/
+    next();
+  })
+
+  schema.post('save', function(doc, next) {
+    /**在此定义变量或引入模块*/
+    next();
+  });
+
+  return schema;
 };

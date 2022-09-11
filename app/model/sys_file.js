@@ -1,28 +1,17 @@
 'use strict';
 
 module.exports = app => {
-  const attributes = {
-    fileCode: {
-      name: '文件编码',
-      type: String,
-    },
-    fileName: {
-      name: '文件名称',
-      type: String,
-    },
-    fileType: {
-      name: '文件类型',
-      type: String,
-    },
-    fileSize: {
-      name: '文件大小',
-      type: String,
-    },
-    filePath: {
-      name: '文件路径',
-      type: String,
-    },
-  };
+  const schema =  app.clapMongooseSchema(require('./entity/sys_file')(app));
 
-  return app.clapMongooseSchema(attributes, false);
+  schema.pre('save', async (next) => {
+    /**在此定义变量或引入模块*/
+    next();
+  })
+
+  schema.post('save', function(doc, next) {
+    /**在此定义变量或引入模块*/
+    next();
+  });
+
+  return schema;
 };
