@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require("path");
+
 module.exports = appInfo => {
   const config = {};
 
@@ -33,7 +35,7 @@ module.exports = appInfo => {
 
   config.static = {
     prefix: '/',
-    dir: require('path').join(appInfo.baseDir, 'app/public'),
+    dir: [ path.join(appInfo.baseDir, 'app/public'), { prefix: '/assets', dir: path.join(appInfo.baseDir, 'app/assets') }],
     dynamic: true,
     preload: true,
     buffer: false,
